@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
+
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import TodoItem from "./components/ui/todoItem";
-import type { Todo } from "./types/todo";
+import TodoItem from "@/components/ui/todoItem";
 import { useJokes } from "@/hooks/useJokes";
+
+import type { Todo } from "./types/todo";
+
 import "./App.css";
 
 function App() {
