@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import jokeService from "@/service/jokes";
 import { Joke, JokeCategory } from "@/types/joke";
 
 export const useJokes = (categories: JokeCategory[]) => {
@@ -11,10 +11,8 @@ export const useJokes = (categories: JokeCategory[]) => {
     (async () => {
       setLoading(true);
       try {
-        const { data } = await axios.get<Joke>(
-          `https://v2.jokeapi.dev/joke/${categories.join(",")}?type=single`
-        );
-        setJoke(data);
+        const joke = await jokeService.getJokeByCategories(categories);
+        setJoke(joke);
       } catch (err) {
         setError(`${err}`);
       } finally {
