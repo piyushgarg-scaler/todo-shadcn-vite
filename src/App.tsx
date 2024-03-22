@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import TodoItem from "./components/ui/todoItem";
 import type { Todo } from "./types/todo";
-
+import { useJokes } from "@/hooks/useJokes";
 import "./App.css";
 
 function App() {
@@ -13,6 +13,8 @@ function App() {
     if (todos) return JSON.parse(todos) as Todo[];
     return [];
   });
+
+  const { isLoading, joke } = useJokes(["Programming"]);
 
   useEffect(() => {
     localStorage.setItem("todos", JSON.stringify(todos));
@@ -40,7 +42,10 @@ function App() {
 
   return (
     <div className="flex w-[100vw] h-[100vh] items-center justify-center">
-      <div>
+      <div className="w-[30vw]">
+        <div className="text-sm mb-4">
+          {isLoading ? <p>Loading....</p> : <p>{joke?.joke}</p>}
+        </div>
         <div className="flex gap-2">
           <Input
             value={value}
