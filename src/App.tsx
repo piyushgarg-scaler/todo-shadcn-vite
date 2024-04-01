@@ -3,11 +3,11 @@ import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import TodoItem from "@/components/ui/todoItem";
-import { useJokes } from "@/hooks/useJokes";
 
 import type { Todo } from "./types/todo";
 
 import "./App.css";
+import ThemeToggle from "./components/ThemeToggle";
 
 function App() {
   const [value, setValue] = useState("");
@@ -16,8 +16,6 @@ function App() {
     if (todos) return JSON.parse(todos) as Todo[];
     return [];
   });
-
-  const { isLoading, joke } = useJokes(["Programming"]);
 
   useEffect(() => {
     localStorage.setItem("todos", JSON.stringify(todos));
@@ -44,31 +42,34 @@ function App() {
   };
 
   return (
-    <div className="flex w-[100vw] h-[100vh] items-center justify-center">
-      <div className="w-[30vw]">
-        <div className="text-sm mb-4">
-          {isLoading ? <p>Loading....</p> : <p>{joke?.joke}</p>}
-        </div>
-        <div className="flex gap-2">
-          <Input
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            placeholder="Type something here..."
-          />
-          <Button disabled={value.trim() === ""} onClick={handleClickAddButton}>
-            Add
-          </Button>
-        </div>
-        <div className="mt-5">
-          {todos.map((todo) => (
-            <TodoItem
-              key={todo.id}
-              item={todo}
-              onMarkComplete={(id) => handleToggleTodoItem(id, true)}
-              onMarkInComplete={(id) => handleToggleTodoItem(id, false)}
-              onDelete={handleDeleteTodoItem}
+    <div>
+      <div className="flex w-[100vw] h-[100vh] items-center justify-center">
+        <div className="w-[30vw]">
+          <div className="flex gap-2">
+            <ThemeToggle />
+            <Input
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              placeholder="Type something here..."
             />
-          ))}
+            <Button
+              disabled={value.trim() === ""}
+              onClick={handleClickAddButton}
+            >
+              Add
+            </Button>
+          </div>
+          <div className="mt-5">
+            {todos.map((todo) => (
+              <TodoItem
+                key={todo.id}
+                item={todo}
+                onMarkComplete={(id) => handleToggleTodoItem(id, true)}
+                onMarkInComplete={(id) => handleToggleTodoItem(id, false)}
+                onDelete={handleDeleteTodoItem}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </div>
