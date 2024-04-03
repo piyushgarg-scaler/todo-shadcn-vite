@@ -1,44 +1,35 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useAppDispatch, useAppSelector } from "./redux/hooks";
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import TodoItem from "@/components/ui/todoItem";
 
-import type { Todo } from "./types/todo";
+import {
+  createTodoItem,
+  deleteTodoItem,
+  toggleTodoItem,
+} from "@/redux/slices/todos";
 
 import "./App.css";
-import ThemeToggle from "./components/ThemeToggle";
 
 function App() {
-  const [value, setValue] = useState("");
-  const [todos, setTodos] = useState<Todo[]>(() => {
-    const todos = localStorage.getItem("todos");
-    if (todos) return JSON.parse(todos) as Todo[];
-    return [];
-  });
+  const todos = useAppSelector((store) => store.todo.todos);
+  const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    localStorage.setItem("todos", JSON.stringify(todos));
-  }, [todos]);
+  const [value, setValue] = useState("");
 
   const handleClickAddButton = () => {
-    setTodos([
-      ...todos,
-      { id: Date.now().toString(), title: value, isCompleted: false },
-    ]);
+    dispatch(createTodoItem(value));
     setValue("");
   };
 
   const handleToggleTodoItem = (id: string, value: boolean) => {
-    const updatedState = todos.map((todo) =>
-      todo.id === id ? { ...todo, isCompleted: value } : todo
-    );
-    setTodos(updatedState);
+    dispatch(toggleTodoItem({ id, value }));
   };
 
   const handleDeleteTodoItem = (id: string) => {
-    const filteredItems = todos.filter((e) => e.id !== id);
-    setTodos(filteredItems);
+    dispatch(deleteTodoItem(id));
   };
 
   return (
@@ -46,7 +37,6 @@ function App() {
       <div className="flex w-[100vw] h-[100vh] items-center justify-center">
         <div className="w-[30vw]">
           <div className="flex gap-2">
-            <ThemeToggle />
             <Input
               value={value}
               onChange={(e) => setValue(e.target.value)}
