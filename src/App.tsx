@@ -8,13 +8,14 @@ import TodoItem from "@/components/ui/todoItem";
 import {
   createTodoItem,
   deleteTodoItem,
+  getAllTodos,
   toggleTodoItem,
 } from "@/redux/slices/todos";
 
 import "./App.css";
 
 function App() {
-  const todos = useAppSelector((store) => store.todo.todos);
+  const todos = useAppSelector(getAllTodos);
   const dispatch = useAppDispatch();
 
   const [value, setValue] = useState("");

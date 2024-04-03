@@ -1,5 +1,6 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, createSelector } from "@reduxjs/toolkit";
 import type { Todo } from "@/types/todo";
+import { RootState } from "../store";
 
 interface ITodoState {
   todos: Todo[];
@@ -42,6 +43,11 @@ const todoSlice = createSlice({
     },
   },
 });
+
+export const getAllTodos = createSelector(
+  (store: RootState) => store,
+  (store) => store.todo.todos
+);
 
 export const { createTodoItem, deleteTodoItem, toggleTodoItem } =
   todoSlice.actions;
