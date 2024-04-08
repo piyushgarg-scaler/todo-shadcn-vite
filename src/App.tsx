@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "./redux/hooks";
 
 import { Input } from "@/components/ui/input";
@@ -13,12 +13,19 @@ import {
 } from "@/redux/slices/todos";
 
 import "./App.css";
+import { fetchJoke, getJokeSelector } from "./redux/slices/jokes";
 
 function App() {
   const todos = useAppSelector(getAllTodos);
+  const joke = useAppSelector(getJokeSelector);
+
   const dispatch = useAppDispatch();
 
   const [value, setValue] = useState("");
+
+  useEffect(() => {
+    dispatch(fetchJoke());
+  }, [dispatch]);
 
   const handleClickAddButton = () => {
     dispatch(createTodoItem(value));
@@ -37,6 +44,7 @@ function App() {
     <div>
       <div className="flex w-[100vw] h-[100vh] items-center justify-center">
         <div className="w-[30vw]">
+          {joke.isLoading ? "Loading" : joke.joke}
           <div className="flex gap-2">
             <Input
               value={value}
